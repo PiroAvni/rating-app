@@ -8,7 +8,6 @@ import { FeedbackProvider } from "./context/FeedbackContext";
 import AboutIconLink from "./components/AboutIconLink";
 
 function App() {
-  
   /*  return React.createElement(
         'div', 
         { className:'container' }, 
@@ -25,9 +24,9 @@ function App() {
               path="/"
               element={
                 <>
-                  <FeedbackFrom  />
+                  <FeedbackFrom />
                   <FeedbackStats />
-                  <FeedbackList  />
+                  <FeedbackList />
                 </>
               }
             ></Route>

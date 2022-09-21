@@ -4,7 +4,7 @@ import Card from "./shared/Card";
 import Button from "./shared/Button";
 import FeedbackContext from "../context/FeedbackContext";
 
-function FeedbackForm({}) {
+function FeedbackForm() {
   const [text, setText] = useState(""); // input text
   const [rating, setRating] = useState(10); // input Rating
   const [btnDisabled, setBtnDisabled] = useState(true); // Send Button
@@ -21,40 +21,81 @@ function FeedbackForm({}) {
     }
   }, [feedbackEdit]);
 
-  const handleTextChange = (e) => {
-    // if the text = nothing and set button disabled
-    if (text === "") {
-      setBtnDisabled(true);
-      setMessage(null);
-      // text isNot = nothing & less than 10 characters show message
-    } else if (text !== "" && text.trim().length <= 10) {
-      setMessage("Text must be at least 10 characters");
-      setBtnDisabled(true);
+//   const handleTextChange = (e) => {
+//     // if the text = nothing and set button disabled
+//     if (text === "") {
+//       setBtnDisabled(true);
+//       setMessage(null);
+//       // text isNot = nothing & less than 10 characters show message
+//     } else if (text !== "" && text.trim().length <= 10) {
+//       setMessage("Text must be at least 10 characters");
+//       setBtnDisabled(true);
+//     } else {
+//       // text greater than 10 characters - button is enabled
+//       setMessage(null);
+//       setBtnDisabled(false);
+//     }
+//     setText(e.target.value);
+//   };
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     if (text.trim().length > 10) {
+//       const newFeedback = {
+//         text,
+//         rating,
+//       }
+
+//       if (feedbackEdit.edit === true) {
+//         updateFeedback(feedbackEdit.item.id, newFeedback);
+//       } else {
+//         addFeedback(newFeedback);
+//       }
+
+//       setText("");
+//     }
+//   };
+// NOTE: This should be checking input value not state as state won't be the updated value until the next render of the component
+
+  // prettier-ignore
+  const handleTextChange = ({ target: { value } }) => { // 👈  get the value
+    if (value === '') {
+      setBtnDisabled(true)
+      setMessage(null)
+      
+  // prettier-ignore
+    } else if (value.trim().length < 10) { // 👈 check for less than 10
+      setMessage('Text must be at least 10 characters')
+      setBtnDisabled(true)
     } else {
-      // text greater than 10 characters - button is enabled
-      setMessage(null);
-      setBtnDisabled(false);
+      setMessage(null)
+      setBtnDisabled(false)
     }
-    setText(e.target.value);
-  };
+    setText(value)
+  }
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (text.trim().length > 10) {
       const newFeedback = {
         text,
         rating,
       }
-      
+
       if (feedbackEdit.edit === true) {
-        updateFeedback(feedbackEdit.item.id, newFeedback);
+        updateFeedback(feedbackEdit.item.id, newFeedback)
       } else {
-        addFeedback(newFeedback);
+        addFeedback(newFeedback)
       }
 
-      setText("");
+      // NOTE: reset to default state after submission
+      setBtnDisabled(true) // 👈  add this line to reset disabled
+      setRating(10) //👈 add this line to set rating back to 10
+      setText('')
     }
-  };
+  }
 
+  // NOTE: pass selected to RatingSelect so we don't need local duplicate state
+  
   return (
     <Card>
       <form onSubmit={handleSubmit}>
